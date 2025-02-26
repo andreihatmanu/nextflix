@@ -13,7 +13,7 @@ interface UserMetadata {
 }
 
 // Function to Insert Stats
-export async function insertStats(token: string, params: StatsParams): Promise<any> {
+export async function insertStats(token: string, params: StatsParams): Promise<StatsParams> {
   const { favourited, userId, watched, videoId } = params;
 
   const operationsDoc = `
@@ -39,7 +39,7 @@ export async function insertStats(token: string, params: StatsParams): Promise<a
 }
 
 // Function to Update Stats
-export async function updateStats(token: string, params: StatsParams): Promise<any> {
+export async function updateStats(token: string, params: StatsParams): Promise<StatsParams> {
   const { favourited, userId, watched, videoId } = params;
 
   const operationsDoc = `
@@ -96,7 +96,7 @@ export async function findVideoIdByUser(
 }
 
 // Function to Create a New User
-export async function createNewUser(token: string, metadata: UserMetadata): Promise<any> {
+export async function createNewUser(token: string, metadata: UserMetadata): Promise<UserMetadata> {
   const operationsDoc = `
   mutation createNewUser($issuer: String!, $email: String!, $publicAddress: String!) {
     insert_users(objects: {email: $email, issuer: $issuer, publicAddress: $publicAddress}) {
@@ -135,7 +135,7 @@ export async function isNewUser(token: string, issuer: string): Promise<boolean>
   return response?.data?.users?.length === 0;
 }
 
-export async function watchAgainVideos(userId: string, token: string): Promise<any> {
+export async function watchAgainVideos(userId: string, token: string): Promise<StatsParams> {
   const operationsDoc = `
   query watchedVideos($userId: String!) {
     stats(where: {
@@ -150,7 +150,7 @@ export async function watchAgainVideos(userId: string, token: string): Promise<a
   const response = await queryHasuraGQL(operationsDoc, 'watchedVideos', { userId }, token);
   return response;
 }
-export async function myListVideos(userId: string, token: string): Promise<any> {
+export async function myListVideos(userId: string, token: string): Promise<StatsParams> {
   const operationsDoc = `
   query myListVideos($userId: String!) {
     stats(where: {

@@ -1,14 +1,40 @@
 import videoData from '../data/videos.json';
 import { watchAgainVideos, myListVideos } from './db/hasura';
 
+// Interface for the YouTube API snippet
+interface Snippet {
+  title: string;
+  description: string;
+  publishedAt: string;
+  channelTitle: string;
+  thumbnails: {
+    high: {
+      url: string;
+    };
+  };
+}
+
+// Interface for the YouTube API statistics (views, etc.)
+interface Statistics {
+  viewCount: number;
+  [key: string]: any; // allow for additional fields
+}
+
+// Interface for the video object
 interface Video {
-  id: string;
   title: string;
   imgUrl: string;
+  id: string;
   description: string;
   publishTime: string;
   channelTitle: string;
-  statistics: Object;
+  statistics: Statistics;
+}
+// Interface for the YouTube API response item
+interface YouTubeItem {
+  id: string | { videoId?: string };
+  snippet: Snippet;
+  statistics?: Statistics;
 }
 
 const fetchVideos = async (url: string) => {
@@ -45,8 +71,9 @@ export const getCommonVideos = async (url: string) => {
  * @param item - API response item
  * @returns Mapped Video object
  */
-const mapVideoData = (item: any): Video => {
-  const id = item.id?.videoId || item.id;
+const mapVideoData = (item: YouTubeItem): Video => {
+  // If the id is an object, extract the videoId; otherwise, use it directly as a string
+  const id = typeof item.id === 'string' ? item.id : item.id?.videoId || '';
   const snippet = item.snippet;
   return {
     title: snippet?.title,
