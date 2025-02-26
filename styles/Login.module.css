@@ -32,6 +32,9 @@
   align-items: center;
   color: var(--white10);
   margin-bottom: 1rem /* 16px */;
+}
+
+.logoWrapper {
   color: var(--red);
   width: 8rem /* 128px */;
 }
@@ -40,7 +43,11 @@
   width: 100%;
   height: 100vh;
   position: relative;
+
   display: flex;
+  width: 100%;
+  height: 100%;
+
   z-index: 10;
   justify-content: center;
 }

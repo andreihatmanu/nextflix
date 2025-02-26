@@ -1,6 +1,6 @@
-import styles from './loading.module.css';
+import styles from "./loading.module.css";
 
-const Loading: React.FC = () => {
+const Loading = () => {
   return <p className={styles.loader}>Loading...</p>;
 };
 

@@ -1,16 +1,14 @@
 import Image from 'next/image';
-import styles from './banner.module.css';
 import { useRouter } from 'next/router';
+import styles from './banner.module.css';
 
-const Banner = (props: { title: string; subTitle: string; imgUrl: string, videoId: string }) => {
+const Banner = (props) => {
   const { title, subTitle, imgUrl, videoId } = props;
-
-  const router = useRouter()
+  const router = useRouter();
 
   const handleOnPlay = () => {
-    router.push(`/video/${videoId}`)
+    router.push(`video/${videoId}`);
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.leftWrapper}>
@@ -25,7 +23,7 @@ const Banner = (props: { title: string; subTitle: string; imgUrl: string, videoI
           <div className={styles.playBtnWrapper}>
             <button className={styles.btnWithIcon} onClick={handleOnPlay}>
               <Image
-                src={'/static/play_arrow.svg'}
+                src="/static/play_arrow.svg"
                 alt="Play icon"
                 width="32"
                 height="32"
@@ -35,10 +33,11 @@ const Banner = (props: { title: string; subTitle: string; imgUrl: string, videoI
           </div>
         </div>
       </div>
-
       <div
         className={styles.bannerImg}
-        style={{ backgroundImage: `url(${imgUrl})` }}
+        style={{
+          backgroundImage: `url(${imgUrl}`,
+        }}
       ></div>
     </div>
   );

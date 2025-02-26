@@ -1,36 +1,22 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
-import { getYoutubeVideoById } from '@/lib/videos';
-import NavBar from '@/components/nav/navbar';
-import Like from '../../components/icons/like-icon';
-import DisLike from '../../components/icons/dislike-icon';
-import clsx from 'classnames';
-import styles from '../../styles/Video.module.css';
+import { useState, useEffect } from "react";
 
-Modal.setAppElement('#__next');
+import { useRouter } from "next/router";
+import Modal from "react-modal";
+import styles from "../../styles/Video.module.css";
 
-interface Video {
-  id: string;
-  title: string;
-  imgUrl: string;
-  description: string;
-  publishTime: string;
-  channelTitle: string;
-  statistics: { viewCount: number };
-}
+import NavBar from "../../components/nav/navbar";
+import clsx from "classnames";
 
-export async function getStaticProps(context: { params: { videoId: string } }) {
-  //data to fetch from API
-  /*const video = {
-    title: 'Hi cute dog',
-    publishTime: '1990-01-01',
-    description:
-      'A big red dog that is super cute, can he get any bigger? A big red dog that is super cute, can he get any bigger?',
-    channelTitle: 'Paramount Pictures',
-    viewCount: 10000,
-  };*/
-  const videoArray = await getYoutubeVideoById(context.params.videoId);
+import { getYoutubeVideoById } from "../../lib/videos";
+
+import Like from "../../components/icons/like-icon";
+import DisLike from "../../components/icons/dislike-icon";
+
+Modal.setAppElement("#__next");
+
+export async function getStaticProps(context) {
+  const videoId = context.params.videoId;
+  const videoArray = await getYoutubeVideoById(videoId);
 
   return {
     props: {
@@ -41,21 +27,28 @@ export async function getStaticProps(context: { params: { videoId: string } }) {
 }
 
 export async function getStaticPaths() {
-  const listOfVideos = ['mYfJxlgR2jw', '4zH5iYM4wJo', 'KCPEHsAViiQ'];
+  const listOfVideos = ["mYfJxlgR2jw", "4zH5iYM4wJo", "KCPEHsAViiQ"];
   const paths = listOfVideos.map((videoId) => ({
     params: { videoId },
   }));
 
-  return { paths, fallback: 'blocking' };
+  return { paths, fallback: "blocking" };
 }
 
-const Video: React.FC<{ video: Video }> = ({ video }) => {
+const Video = ({ video }) => {
   const router = useRouter();
+  const videoId = router.query.videoId;
 
   const [toggleLike, setToggleLike] = useState(false);
-  const [toggleDislike, setToggleDislike] = useState(false);
+  const [toggleDisLike, setToggleDisLike] = useState(false);
 
-  const { videoId } = router.query;
+  const {
+    title,
+    publishTime,
+    description,
+    channelTitle,
+    statistics: { viewCount } = { viewCount: 0 },
+  } = video;
 
   useEffect(() => {
     const handleLikeDislikeService = async () => {
@@ -69,52 +62,42 @@ const Video: React.FC<{ video: Video }> = ({ video }) => {
         if (favourited === 1) {
           setToggleLike(true);
         } else if (favourited === 0) {
-          setToggleDislike(true);
+          setToggleDisLike(true);
         }
       }
     };
     handleLikeDislikeService();
   }, [videoId]);
-  const {
-    title,
-    publishTime,
-    description,
-    channelTitle,
-    statistics: { viewCount },
-  } = video;
 
-  const handleToggleLike = async () => {
-    setToggleLike(!toggleLike);
-    setToggleDislike(toggleLike);
-
-    const val = !toggleLike;
-    await fetch('/api/stats', {
-      method: 'POST',
+  const runRatingService = async (favourited) => {
+    return await fetch("/api/stats", {
+      method: "POST",
       body: JSON.stringify({
         videoId,
-        favourited: val ? 1 : 0,
+        favourited,
       }),
       headers: {
-        'content-type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
   };
+
   const handleToggleDislike = async () => {
-    setToggleDislike(!toggleDislike);
-    setToggleLike(toggleDislike);
+    setToggleDisLike(!toggleDisLike);
+    setToggleLike(toggleDisLike);
 
-    const val = !toggleDislike;
+    const val = !toggleDisLike;
+    const favourited = val ? 0 : 1;
+    const response = await runRatingService(favourited);
+  };
 
-    await fetch('/api/stats', {
-      method: 'POST',
-      body: JSON.stringify({
-        videoId,
-        favourited: val ? 0 : 1,
-      }),
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+  const handleToggleLike = async () => {
+    const val = !toggleLike;
+    setToggleLike(val);
+    setToggleDisLike(toggleLike);
+
+    const favourited = val ? 1 : 0;
+    const response = await runRatingService(favourited);
   };
 
   return (
@@ -129,8 +112,8 @@ const Video: React.FC<{ video: Video }> = ({ video }) => {
       >
         <iframe
           id="ytplayer"
-          type="text/html"
           className={styles.videoPlayer}
+          type="text/html"
           width="100%"
           height="360"
           src={`https://www.youtube.com/embed/${videoId}?autoplay=0&origin=http://example.com&controls=0&rel=1`}
@@ -147,11 +130,10 @@ const Video: React.FC<{ video: Video }> = ({ video }) => {
           </div>
           <button onClick={handleToggleDislike}>
             <div className={styles.btnWrapper}>
-              <DisLike selected={toggleDislike} />
+              <DisLike selected={toggleDisLike} />
             </div>
           </button>
         </div>
-
         <div className={styles.modalBody}>
           <div className={styles.modalBodyContent}>
             <div className={styles.col1}>
