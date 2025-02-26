@@ -17,7 +17,6 @@ interface Snippet {
 // Interface for the YouTube API statistics (views, etc.)
 interface Statistics {
   viewCount: number;
-  [key: string]: any; // allow for additional fields
 }
 
 // Interface for the video object

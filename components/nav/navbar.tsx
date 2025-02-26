@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { magic } from '@/lib/magic-client';
+import Link from 'next/link';
 
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -64,7 +65,7 @@ const NavBar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-      <Link href="/" className={styles.logoLink} href="/">
+        <Link href="/" className={styles.logoLink}>
           <div className={styles.logoWrapper}>
             <Image src={'/static/netflix.svg'} alt="Netflix logo" width="128" height="34" />
           </div>

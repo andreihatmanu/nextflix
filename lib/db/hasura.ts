@@ -12,6 +12,12 @@ interface UserMetadata {
   publicAddress: string;
 }
 
+// Define the GraphQL response type (you can modify this based on your needs)
+interface GraphQLResponse<T> {
+  data: T;
+  errors?: Array<{ message: string }>;
+}
+
 // Function to Insert Stats
 export async function insertStats(token: string, params: StatsParams): Promise<StatsParams> {
   const { favourited, userId, watched, videoId } = params;
@@ -173,7 +179,7 @@ async function queryHasuraGQL<T>(
   operationName: string,
   variables: Record<string, unknown>,
   token: string
-): Promise<any> {
+): Promise<GraphQLResponse<T>> {
   const result = await fetch(`${process.env.NEXT_PUBLIC_HASURA_ADMIN_URL}`, {
     method: 'POST',
     headers: {
@@ -188,5 +194,8 @@ async function queryHasuraGQL<T>(
     }),
   });
 
-  return result.json();
+  // Assuming the GraphQL response will be in JSON format
+  const jsonResponse = await result.json();
+  
+  return jsonResponse; // The response will now be typed as GraphQLResponse<T>
 }
