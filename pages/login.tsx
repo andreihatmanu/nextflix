@@ -43,9 +43,7 @@ const Login: React.FC = () => {
             },
           });
 
-          const loggedInResponse = await response.json();
-
-          if (loggedInResponse) {
+          if (response) {
             router.push('/');
           }
 

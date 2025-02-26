@@ -4,7 +4,7 @@ import NavBar from '@/components/nav/navbar';
 
 import SectionCards from '@/components/card/section-cards';
 import { getMyListVideos } from '@/lib/videos';
-import useRedirectUser from '@/utils/redirectUser';
+import redirectUser from '@/utils/redirectUser';
 import Video from '../video/[videoId]';
 
 import styles from '../../styles/MyList.module.css';
@@ -14,7 +14,7 @@ interface MyListProps {
 }
 
 export const getServerSideProps: GetServerSideProps<MyListProps> = async (context) => {
-  const { userId, token } = await useRedirectUser(context);
+  const { userId, token } = await redirectUser(context);
 
   const myListVideos = await getMyListVideos(userId, token);
 

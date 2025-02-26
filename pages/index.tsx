@@ -8,7 +8,7 @@ import SectionCards from '@/components/card/section-cards';
 import { getPopularVideos, getVideos, getWatchAgainVideos } from '../lib/videos';
 import { GetServerSideProps } from 'next';
 import { verifyToken } from '@/lib/utils';
-import useRedirectUser from '@/utils/redirectUser';
+import redirectUser from '@/utils/redirectUser';
 
 // Define the Video type
 export interface Video {
@@ -29,7 +29,7 @@ interface HomeProps {
 }
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async (context) => {
-  const { userId, token } = await useRedirectUser(context);
+  const { userId, token } = await redirectUser(context);
 
   const watchItAgainVideos = await getWatchAgainVideos(userId, token);
   const disneyVideos = await getVideos('Disney');

@@ -3,7 +3,7 @@ import { ServerResponse, IncomingMessage } from 'http';
 import { PreviewData } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
-const useRedirectUser = async (context: {
+const redirectUser = async (context: {
   req: any;
   res?: ServerResponse<IncomingMessage>;
   params?: ParsedUrlQuery | undefined;
@@ -24,4 +24,4 @@ const useRedirectUser = async (context: {
     token,
   };
 };
-export default useRedirectUser;
+export default redirectUser;
