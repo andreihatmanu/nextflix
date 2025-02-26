@@ -7,7 +7,6 @@ import SectionCards from '@/components/card/section-cards';
 
 import { getPopularVideos, getVideos, getWatchAgainVideos } from '../lib/videos';
 import { GetServerSideProps } from 'next';
-import { verifyToken } from '@/lib/utils';
 import redirectUser from '@/utils/redirectUser';
 
 // Define the Video type

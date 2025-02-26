@@ -50,6 +50,7 @@ const Login: React.FC = () => {
         }
       } catch (error) {
         setIsLoading(false);
+        console.error(error)
         // Handle errors if required!
       }
     } else {

@@ -7,8 +7,8 @@ const SectionCards = (props: {
   title: string;
   videos: Array<T>;
   size: string;
-  shouldWrap?: Boolean;
-  shouldScale?: Boolean;
+  shouldWrap?: boolean;
+  shouldScale?: boolean;
 }) => {
   const { title, videos, shouldWrap = false, size, shouldScale = true } = props;
 

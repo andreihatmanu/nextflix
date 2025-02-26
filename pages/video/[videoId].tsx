@@ -17,7 +17,7 @@ interface Video {
   description: string;
   publishTime: string;
   channelTitle: string;
-  statistics: { viewCount: Number };
+  statistics: { viewCount: number };
 }
 
 export async function getStaticProps(context: { params: { videoId: string } }) {
@@ -88,7 +88,7 @@ const Video: React.FC<{ video: Video }> = ({ video }) => {
     setToggleDislike(toggleLike);
 
     const val = !toggleLike;
-    const response = await fetch('/api/stats', {
+    await fetch('/api/stats', {
       method: 'POST',
       body: JSON.stringify({
         videoId,
@@ -105,7 +105,7 @@ const Video: React.FC<{ video: Video }> = ({ video }) => {
 
     const val = !toggleDislike;
 
-    const response = await fetch('/api/stats', {
+    await fetch('/api/stats', {
       method: 'POST',
       body: JSON.stringify({
         videoId,
