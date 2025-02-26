@@ -79,7 +79,7 @@ export async function findVideoIdByUser(
   token: string,
   userId: string,
   videoId: string
-): Promise<any> {
+): Promise<StatsParams> {
   const operationsDoc = `
   query findVideoIdByUserId($userId: String!, $videoId: String!) {
     stats(where: { userId: {_eq: $userId}, videoId: {_eq: $videoId }}) {
