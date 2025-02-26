@@ -33,7 +33,6 @@ export const getCommonVideos = async (url: string) => {
       console.error('YouTube API error', data?.error?.code, data?.error?.message);
       return mapFallbackVideos();
     }
-    console.log(process.env.DEVELOPMENT);
     return data?.items.map(mapVideoData) || [];
   } catch (error) {
     console.error('Something went wrong with video library', error);
@@ -75,7 +74,6 @@ const mapFallbackVideos = (): Video[] => {
  * @returns Promise of Video array
  */
 export const getVideos = (searchQuery: string): Promise<Video[]> => {
-  console.log('Fetching videos for:', searchQuery);
   const URL = `search?part=snippet&q=${searchQuery}&type=video`;
   return getCommonVideos(URL);
 };

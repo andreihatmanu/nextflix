@@ -46,7 +46,6 @@ const Login: React.FC = () => {
           const loggedInResponse = await response.json();
 
           if (loggedInResponse) {
-            console.log({ loggedInResponse });
             router.push('/');
           }
 
@@ -54,7 +53,6 @@ const Login: React.FC = () => {
       } catch (error) {
         setIsLoading(false);
         // Handle errors if required!
-        console.log('Something went wrong logging in', error);
       }
     } else {
       setIsLoading(false);
