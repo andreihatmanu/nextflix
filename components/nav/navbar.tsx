@@ -6,38 +6,46 @@ import { useEffect, useState } from 'react';
 import { magic } from '@/lib/magic-client';
 import Link from 'next/link';
 
-const NavBar = () => {
+const NavBar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [username, setUsername] = useState('');
-  const [didToken, setDidToken] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [didToken, setDidToken] = useState<string>('');
 
   const router = useRouter();
 
   useEffect(() => {
-    async function getUsername() {
+    // Function to retrieve user data
+    const getUsername = async () => {
       try {
-        const { email } = await magic.user.getMetadata();
-        const didToken = await magic.user.getIdToken();
-        if (email) {
-          setUsername(email);
-          setDidToken(didToken);
+        if (magic) {
+          const { email } = await magic.user.getMetadata();
+          const token = await magic.user.getIdToken();
+          if (email && token) {
+            setUsername(email);
+            setDidToken(token);
+          }
+        } else {
+          console.error('Error, magic not defined');
         }
       } catch (error) {
-        console.error('Error retrieving email:', error);
+        console.error('Error retrieving user metadata:', error);
       }
-    }
-    getUsername();
-  }, []);
+    };
 
-  const handleOnClickHome = (e: { preventDefault: () => void }) => {
+    getUsername();
+  });
+
+  const handleOnClickHome = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push('/');
   };
-  const handleOnClickMyList = (e: { preventDefault: () => void }) => {
+
+  const handleOnClickMyList = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push('/browse/my-list');
   };
-  const handleShowDropdown = (e: { preventDefault: () => void }) => {
+
+  const handleShowDropdown = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowDropdown(!showDropdown);
   };
@@ -57,7 +65,7 @@ const NavBar = () => {
         window.location.href = res.redirect;
       }
     } catch (error) {
-      console.error('Error logging out', error);
+      console.error('Error logging out:', error);
       router.push('/login');
     }
   };
@@ -67,7 +75,7 @@ const NavBar = () => {
       <div className={styles.wrapper}>
         <Link href="/" className={styles.logoLink}>
           <div className={styles.logoWrapper}>
-            <Image src={'/static/netflix.svg'} alt="Netflix logo" width="128" height="34" />
+            <Image src="/static/netflix.svg" alt="Netflix logo" width={128} height={34} />
           </div>
         </Link>
 
@@ -84,12 +92,12 @@ const NavBar = () => {
           <div>
             <button className={styles.usernameBtn} onClick={handleShowDropdown}>
               <p className={styles.username}>{username}</p>
-              <Image src={'/static/expand_more.svg'} alt="Expand dropdown" width="24" height="24" />
+              <Image src="/static/expand_more.svg" alt="Expand dropdown" width={24} height={24} />
             </button>
             {showDropdown && (
               <div className={styles.navDropdown}>
                 <a className={styles.linkName} onClick={handleSignout}>
-                  Sign out{' '}
+                  Sign out
                 </a>
                 <div className={styles.lineWrapper}></div>
               </div>

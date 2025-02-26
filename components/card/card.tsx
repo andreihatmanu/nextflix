@@ -13,7 +13,8 @@ const Card = (props: { imgUrl: string; size: string; id: number; shouldScale: bo
   } = props;
   const [imgSrc, setImgSrc] = useState(imgUrl);
 
-  const classMap = {
+  // Define the keys as a union type 'large' | 'medium' | 'small'
+  const classMap: { [key: string]: string } = {
     large: styles.lgItem,
     medium: styles.mdItem,
     small: styles.smItem,
